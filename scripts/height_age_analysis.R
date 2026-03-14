@@ -36,9 +36,9 @@ options(na.print = "NA")
 # ---------------------------
 # PATHS (repository-relative)
 # ---------------------------
-data_path    <- here("data", "heightage.xlsx")
-results_path <- here("outputs", "xlsx", "resultspaper.xlsx")
-fig_dir      <- here("outputs", "PDF", "H")
+data_path    <- file.path("data", "heightage.xlsx")
+results_path <- file.path("outputs", "xlsx", "resultspaper.xlsx")
+fig_dir      <- file.path("outputs", "PDF", "H")
 
 dir.create(fig_dir, recursive = TRUE, showWarnings = FALSE)
 dir.create(dirname(results_path), recursive = TRUE, showWarnings = FALSE)
@@ -95,9 +95,9 @@ dat <- raw %>%
     hcom   = coalesce(heightexa, heightave),
     taxon  = as.character(taxon)
   ) %>%
-  filter(!is.na(agecom), !is.na(hcom))
+  dplyr::filter(!is.na(agecom), !is.na(hcom))
 
-df_main <- dat %>% filter(agecom <= age_max_main)
+df_main <- dat %>% dplyr::filter(agecom <= age_max_main)
 
 df_main <- df_main %>%
   mutate(
@@ -124,7 +124,7 @@ cat("Height modelling subset (age ≤ 40): n =", nrow(df_main), " max age =", ma
 # 3) Identify fast-juvenile taxa (k-means on early mean height; within ≤40 subset)
 # ---------------------------
 tax_summ <- df_main %>%
-  filter(!is.na(taxon), taxon != "") %>%
+  dplyr::filter(!is.na(taxon), taxon != "") %>%
   group_by(taxon) %>%
   summarise(
     n_tot = n(),
@@ -134,8 +134,8 @@ tax_summ <- df_main %>%
   ) %>%
   mutate(eligible = (n_tot >= min_total_obs & n_early >= min_early_obs))
 
-early_summary <- tax_summ %>% filter(eligible) %>%
-  select(taxon, n_tot, n_early, mean_h_early)
+early_summary <- tax_summ %>% dplyr::filter(eligible) %>%
+  dplyr::select(taxon, n_tot, n_early, mean_h_early)
 
 if (nrow(early_summary) < 2) {
   stop("Not enough eligible taxa for k-means. Lower thresholds or check data.")
@@ -154,7 +154,7 @@ cluster_rank <- early_summary %>%
 early_summary <- early_summary %>% left_join(cluster_rank, by = "cluster")
 
 df_main <- df_main %>%
-  left_join(early_summary %>% select(taxon, group), by = "taxon") %>%
+  left_join(early_summary %>% dplyr::select(taxon, group), by = "taxon") %>%
   mutate(
     group = case_when(
       is.na(taxon) | taxon == "" ~ "unclassified",
@@ -166,15 +166,15 @@ df_main <- df_main %>%
     point_group = ifelse(group == "fast_juvenile", "fast-juvenile", "non fast-juvenile")
   )
 
-df_baseline <- df_main %>% filter(group != "fast_juvenile")
+df_baseline <- df_main %>% dplyr::filter(group != "fast_juvenile")
 df_fast_early <- df_main %>%
-  filter(group == "fast_juvenile", agecom >= age_min_fastfit, agecom <= A_fast_fit)
+  dplyr::filter(group == "fast_juvenile", agecom >= age_min_fastfit, agecom <= A_fast_fit)
 
 cat("Group counts (age ≤ 40):\n")
 print(df_main %>% count(group) %>% mutate(pct = n / sum(n)))
 
 fast_taxa <- early_summary %>%
-  filter(group == "fast_juvenile") %>%
+  dplyr::filter(group == "fast_juvenile") %>%
   arrange(desc(mean_h_early))
 
 # ---------------------------
@@ -338,7 +338,7 @@ age_seq_cr_early  <- seq(0.5, early_plot_max, length.out = 220)
 age_seq_full      <- seq(0.5, age_max_main, length.out = 260)
 
 plot_early_CI <- function() {
-  base <- ggplot(df_main %>% filter(agecom <= early_plot_max),
+  base <- ggplot(df_main %>% dplyr::filter(agecom <= early_plot_max),
                  aes(x = agecom, y = hcom, colour = point_group)) +
     geom_point(alpha = 0.35, size = 1.0) +
     theme_minimal() +
@@ -475,7 +475,7 @@ write_sheet(wb, paste0("H_Group_Counts_A", age_max_main),
 write_sheet(wb, paste0("H_FastJuvenile_Taxa_A", age_max_main), fast_taxa)
 
 write_sheet(wb, paste0("H_FastJuvenile_TaxonCounts_A", age_max_main),
-            df_main %>% filter(group == "fast_juvenile") %>% count(taxon, sort = TRUE))
+            df_main %>% dplyr::filter(group == "fast_juvenile") %>% count(taxon, sort = TRUE))
 
 saveWorkbook(wb, results_path, overwrite = TRUE)
 message("Tables written to: ", results_path)
