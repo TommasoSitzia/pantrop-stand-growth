@@ -1,0 +1,4 @@
+# Generated analysis outputs
+outputs/PDF/DBH/*.pdf
+outputs/PDF/H/*.pdf
+outputs/xlsx/resultspaper.xlsx
