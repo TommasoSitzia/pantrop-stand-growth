@@ -34,9 +34,9 @@ options(na.print = "NA")
 # ----------------------------- #
 # PATHS (repository-relative)
 # ----------------------------- #
-data_path    <- here("data", "dbhage.xlsx")
-results_path <- here("outputs", "xlsx", "resultspaper.xlsx")
-fig_dir      <- here("outputs", "PDF", "DBH")
+data_path    <- file.path("data", "dbhage.xlsx")
+results_path <- file.path("outputs", "xlsx", "resultspaper.xlsx")
+fig_dir      <- file.path("outputs", "PDF", "DBH")
 
 dir.create(fig_dir, recursive = TRUE, showWarnings = FALSE)
 dir.create(dirname(results_path), recursive = TRUE, showWarnings = FALSE)
@@ -95,7 +95,7 @@ dat <- raw %>%
     dbhcom = coalesce(dbhexa, dbhave),
     taxon  = as.character(taxon)
   ) %>%
-  filter(!is.na(agecom), !is.na(dbhcom)) %>%
+  dplyr::filter(!is.na(agecom), !is.na(dbhcom)) %>%
   mutate(
     weight = case_when(
       ("level" %in% names(.)) & !is.na(level) & level == "T" ~ 1,
@@ -110,7 +110,7 @@ dat <- raw %>%
   )
 
 # IMPORTANT: all fits/weights comparison are done on the modelling window (≤ 40)
-df_main <- dat %>% filter(agecom <= age_max_main)
+df_main <- dat %>% dplyr::filter(agecom <= age_max_main)
 
 w_cap <- quantile(df_main$weight, 0.99, na.rm = TRUE)
 df_main <- df_main %>% mutate(weight_fit = pmin(weight, w_cap))
@@ -241,7 +241,7 @@ tab_pooled <- bind_rows(
     Dataset = paste0("Age ≤ ", age_max_main),
     Model = "Chapman–Richards: DBH(t)=a*(1-exp(-b*t))^c"
   ) %>%
-  select(Dataset, Model, Fit, AIC, RSE, a, b, c, converged)
+  dplyr::select(Dataset, Model, Fit, AIC, RSE, a, b, c, converged)
 
 print(tab_pooled)
 
@@ -254,18 +254,18 @@ print(tab_pooled)
 taxa_ok <- df_main %>%
   group_by(taxon) %>%
   summarise(n_tot = n(), .groups = "drop") %>%
-  filter(n_tot >= min_total_obs) %>%
+  dplyr::filter(n_tot >= min_total_obs) %>%
   pull(taxon)
 
 early_summary <- df_main %>%
-  filter(taxon %in% taxa_ok, agecom <= early_age_max) %>%
+  dplyr::filter(taxon %in% taxa_ok, agecom <= early_age_max) %>%
   group_by(taxon) %>%
   summarise(
     mean_dbh_early = mean(dbhcom, na.rm = TRUE),
     n_early = n(),
     .groups = "drop"
   ) %>%
-  filter(n_early >= min_early_obs)
+  dplyr::filter(n_early >= min_early_obs)
 
 if (nrow(early_summary) < k_classes) {
   stop("Not enough eligible taxa for k-means. Lower thresholds or check data.")
@@ -284,14 +284,14 @@ cluster_map <- early_summary %>%
 early_summary <- early_summary %>% left_join(cluster_map, by = "cluster")
 
 df_main_classed <- df_main %>%
-  left_join(early_summary %>% select(taxon, growth_class), by = "taxon") %>%
+  left_join(early_summary %>% dplyr::select(taxon, growth_class), by = "taxon") %>%
   mutate(
     growth_class = ifelse(is.na(growth_class), "unclassified", growth_class),
     growth_class = factor(growth_class, levels = c("slow","medium","fast","unclassified"))
   )
 
 df_fitclass <- df_main_classed %>%
-  filter(growth_class %in% c("slow","medium","fast")) %>%
+  dplyr::filter(growth_class %in% c("slow","medium","fast")) %>%
   droplevels()
 
 counts_class <- df_fitclass %>%
@@ -301,19 +301,19 @@ counts_class <- df_fitclass %>%
 print(counts_class)
 
 models_class <- df_fitclass %>%
-  group_split(growth_class) %>%
-  setNames(levels(df_fitclass$growth_class)) %>%
-  map(~ fit_cr(.x, weights_col = NULL, start = list(a = 40, b = 0.05, c = 1.0)))
+  dplyr::group_split(growth_class) %>%
+  stats::setNames(levels(df_fitclass$growth_class)) %>%
+  purrr::map(~ fit_cr(.x, weights_col = NULL, start = list(a = 40, b = 0.05, c = 1.0)))
 
-tab_class <- imap_dfr(models_class, function(m, cls) {
-  extract_fit(m) %>% mutate(growth_class = cls)
+tab_class <- purrr::imap_dfr(models_class, function(m, cls) {
+  extract_fit(m) %>% dplyr::mutate(growth_class = cls)
 }) %>%
-  mutate(
+  dplyr::mutate(
     Dataset = paste0("Age ≤ ", age_max_main),
     Fit = "Unweighted",
     Model = "Chapman–Richards by growth class"
   ) %>%
-  select(Dataset, Model, growth_class, Fit, AIC, RSE, a, b, c, converged)
+  dplyr::select(Dataset, Model, growth_class, Fit, AIC, RSE, a, b, c, converged)
 
 print(tab_class)
 
@@ -337,12 +337,12 @@ plot_pooled_CI <- function(show_all_fits = TRUE) {
   )
   
   if (!show_all_fits) {
-    dd <- dd %>% filter(Fit == paper_label)
+    dd <- dd %>% dplyr::filter(Fit == paper_label)
   }
   
   base +
     geom_ribbon(
-      data = dd %>% filter(Fit == paper_label),
+      data = dd %>% dplyr::filter(Fit == paper_label),
       aes(x = agecom, ymin = lo, ymax = hi),
       inherit.aes = FALSE,
       alpha = 0.12,
@@ -367,9 +367,9 @@ plot_classes_CI <- function() {
     ) +
     coord_cartesian(xlim = c(0, age_max_main))
   
-  pred_df <- imap_dfr(models_class, function(m, cls) {
+  pred_df <- purrr::imap_dfr(models_class, function(m, cls) {
     if (is.null(m)) return(NULL)
-    predict_ci_cr(m, age_seq_main) %>% mutate(growth_class = cls)
+    predict_ci_cr(m, age_seq_main) %>% dplyr::mutate(growth_class = cls)
   })
   
   base +
@@ -408,8 +408,8 @@ save_diag_pdf(df_main, m_paper,
               out_pdf = file.path(fig_dir, paste0("DBH_Diag_Pooled_", paper_label, "_Amax", age_max_main, ".pdf")),
               title_prefix = paste0("Pooled ", paper_label, " (Amax ", age_max_main, "): "))
 
-invisible(imap(models_class, function(m, cls) {
-  d_cls <- df_fitclass %>% filter(growth_class == cls)
+invisible(purrr::imap(models_class, function(m, cls) {
+  d_cls <- df_fitclass %>% dplyr::filter(growth_class == cls)
   save_diag_pdf(d_cls, m,
                 out_pdf = file.path(fig_dir, paste0("DBH_Diag_Class_", cls, "_Amax", age_max_main, ".pdf")),
                 title_prefix = paste0("Class ", cls, " (Amax ", age_max_main, "): "))
