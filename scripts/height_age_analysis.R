@@ -467,7 +467,7 @@ wb <- if (file.exists(results_path)) loadWorkbook(results_path) else createWorkb
 
 write_sheet(wb, paste0("H_Baseline_CR_A", age_max_main), tab_baseline)
 write_sheet(wb, paste0("H_FastJuvenile_Power_A", age_min_fastfit, "_", A_fast_fit), tab_fast)
-write_sheet(wb, paste0("H_Within40_IncludingFast_A", age_max_main), tab_within40_sens)
+write_sheet(wb, paste0("H_Within40_Comparison_A", age_max_main), tab_within40_sens)
 
 write_sheet(wb, paste0("H_Group_Counts_A", age_max_main),
             df_main %>% count(group) %>% mutate(pct = n / sum(n)))
