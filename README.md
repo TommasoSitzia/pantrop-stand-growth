@@ -1,3 +1,4 @@
+````markdown
 # pantrop-stand-growth
 
 Data and R scripts for analysing age–height and age–DBH growth trajectories in pan-tropical planted forest stands.
@@ -10,13 +11,13 @@ Data and R scripts for analysing age–height and age–DBH growth trajectories 
 
 This repository contains the datasets and R workflows used to analyse relationships between stand age and two basic tree-size attributes in tropical planted forest stands:
 
-* diameter at breast height (DBH)
-* total tree height
+- diameter at breast height (DBH)
+- total tree height
 
 The repository supports two complementary analyses:
 
-* a **DBH–age analysis** comprising a pooled Chapman–Richards reference curve, Chapman–Richards curves for empirically defined slow and medium growth classes, and a non-asymptotic power model for the fast DBH class;
-* a **height–age analysis** based on a two-component strategy comprising a baseline Chapman–Richards curve and a separate fast-juvenile power model.
+- a **DBH–age analysis** comprising a pooled Chapman–Richards reference curve, Chapman–Richards curves for empirically defined slow and medium growth classes, and a non-asymptotic power model for the fast DBH class;
+- a **height–age analysis** based on a two-component strategy comprising a baseline Chapman–Richards curve and a separate fast-juvenile power model.
 
 The analyses are intended to provide transparent and reproducible general empirical reference relationships and alternative growth scenarios within the age range most strongly supported by the compiled evidence.
 
@@ -38,7 +39,7 @@ pantrop-stand-growth/
 │     ├─ DBH/
 │     └─ H/
 └─ README.md
-```
+````
 
 ## Input data
 
@@ -234,14 +235,13 @@ install.packages(c(
   "purrr",
   "tibble",
   "openxlsx",
-  "gridExtra",
-  "here"
+  "gridExtra"
 ))
 ```
 
 ## How to run the analyses
 
-Clone or download the repository and open the repository root as an RStudio project or as the current R working directory.
+Clone or download the repository and set the repository root as the current working directory in R or RStudio.
 
 Then run:
 
@@ -250,7 +250,7 @@ source("scripts/dbh_age_analysis.R")
 source("scripts/height_age_analysis.R")
 ```
 
-The scripts use repository-relative paths and should be run from the repository root.
+The scripts use repository-relative paths and therefore should be run from the repository root.
 
 Expected input paths are:
 
@@ -301,3 +301,4 @@ The database and scripts may be updated before the final archived release associ
 Department of Land, Environment, Agriculture and Forestry
 University of Padova
 [tommaso.sitzia@unipd.it](mailto:tommaso.sitzia@unipd.it)
+
