@@ -206,7 +206,7 @@ The PDF folders contain manuscript figures, sensitivity figures, and model-diagn
 
 The Excel workbooks contain model coefficients, parameter uncertainty, classification summaries, study-dominance results, leave-one-study-out validation results, sensitivity analyses, and associated predictions.
 
-Generated outputs are intended for local analysis and verification and do not need to be tracked in the repository.
+Generated outputs are intended for local analysis and verification and are not tracked in the repository.
 
 ## Required packages
 
