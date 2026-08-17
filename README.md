@@ -221,7 +221,6 @@ The scripts require the following R packages:
 * `tibble` — tidy table outputs
 * `openxlsx` — writing Excel output workbooks
 * `gridExtra` — arranging diagnostic plots
-* `here` — construction of repository-relative file paths
 
 Install them with:
 
@@ -251,7 +250,7 @@ source("scripts/dbh_age_analysis.R")
 source("scripts/height_age_analysis.R")
 ```
 
-The scripts should resolve input and output locations relative to the repository root.
+The scripts use repository-relative paths and should be run from the repository root.
 
 Expected input paths are:
 
