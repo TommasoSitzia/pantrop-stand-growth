@@ -2,22 +2,23 @@
 
 Data and R scripts for analysing age–height and age–DBH growth trajectories in pan-tropical planted forest stands.
 
-**Working manuscript title**  
-*A pan-tropical database and synthesis of age–height and age–diameter growth in planted forest stands up to 40 years*
+## Working manuscript title
+
+**A pan-tropical database and synthesis of age–height and age–diameter growth in planted forest stands up to 40 years**
 
 ## Overview
 
-This repository contains the datasets and R workflows used to analyse relationships between stand age and two basic tree size attributes in tropical planted forest stands:
+This repository contains the datasets and R workflows used to analyse relationships between stand age and two basic tree-size attributes in tropical planted forest stands:
 
-- diameter at breast height (DBH)
-- total tree height
+* diameter at breast height (DBH)
+* total tree height
 
 The repository supports two complementary analyses:
 
-- a **DBH–age analysis**, based on Chapman–Richards growth curves
-- a **height–age analysis**, based on a two-component strategy including a baseline Chapman–Richards curve and a separate fast-juvenile power model
+* a **DBH–age analysis** comprising a pooled Chapman–Richards reference curve, Chapman–Richards curves for empirically defined slow and medium growth classes, and a non-asymptotic power model for the fast DBH class;
+* a **height–age analysis** based on a two-component strategy comprising a baseline Chapman–Richards curve and a separate fast-juvenile power model.
 
-The analyses are intended to provide transparent and reproducible default age–size relationships within the age range most strongly supported by the compiled evidence.
+The analyses are intended to provide transparent and reproducible general empirical reference relationships and alternative growth scenarios within the age range most strongly supported by the compiled evidence.
 
 ## Repository structure
 
@@ -31,6 +32,8 @@ pantrop-stand-growth/
 │  └─ height_age_analysis.R
 ├─ outputs/
 │  ├─ xlsx/
+│  │  ├─ dbh_results.xlsx
+│  │  └─ height_results.xlsx
 │  └─ PDF/
 │     ├─ DBH/
 │     └─ H/
@@ -41,58 +44,87 @@ pantrop-stand-growth/
 
 The repository expects two Excel files in the `data/` folder:
 
-- `dbhage.xlsx`
-- `heightage.xlsx`
+* `dbhage.xlsx`
+* `heightage.xlsx`
 
 In both workbooks, the scripts expect a worksheet named:
 
-- `data`
+```text
+data
+```
 
-The scripts are written for **clean plantation-only input datasets**.
+The scripts are written for clean plantation-only input datasets.
 
 ### Minimum required columns
 
 For `dbhage.xlsx`:
 
-- `ageexa`
-- `ageave`
-- `dbhexa`
-- `dbhave`
-- `taxon`
+```text
+ageexa
+ageave
+dbhexa
+dbhave
+taxon
+```
 
 For `heightage.xlsx`:
 
-- `ageexa`
-- `ageave`
-- `heightexa`
-- `heightave`
-- `taxon`
+```text
+ageexa
+ageave
+heightexa
+heightave
+taxon
+```
 
 ### Additional columns used when available
 
-The scripts can also use additional columns for weighting, grouping, or metadata handling.
+The scripts use additional columns for weighting, study-aware analyses, reporting-level sensitivity, and metadata handling.
 
 For DBH, these may include:
 
-- `dbhsd`, `dbhmin`, `dbhmax`, `notrees`
-- `level`
-- `country`, `location`
-- `idarticle`, `rain`, `temp`, `treeha`, `treespha`, `stand`
+```text
+idarticle
+dbhsd
+dbhmin
+dbhmax
+notrees
+level
+country
+location
+rain
+temp
+treeha
+treespha
+stand
+```
 
 For height, these may include:
 
-- `heightsd`, `heightmin`, `heightmax`, `notrees`
-- `level`
+```text
+idarticleh
+heightsd
+heightmin
+heightmax
+notrees
+level
+country
+location
+```
 
-If some optional columns are absent, the scripts still run as long as the required columns are present.
+The study identifiers `idarticle` and `idarticleh` are required when the study-balanced and leave-one-study-out analyses are enabled.
 
 ## Analytical scope
 
 Both analyses use a main modelling window of:
 
-- **age ≤ 40 years**
+```text
+age ≤ 40 years
+```
 
-This is the age range used for the manuscript’s main models and default outputs.
+This is the age range used for the manuscript's main models and associated sensitivity analyses.
+
+The observations are concentrated substantially earlier within this interval, so the fitted relationships should be interpreted primarily as empirical references for young and mid-rotation planted stands rather than as long-term extrapolation models.
 
 ## Script summary
 
@@ -102,20 +134,29 @@ This script performs the DBH–age analysis.
 
 It:
 
-- reads `data/dbhage.xlsx`
-- harmonises age and DBH values by prioritising exact values and otherwise using reported means
-- computes optional observation-level weights when uncertainty or sample-size information is available
-- restricts the main modelling dataset to `age ≤ 40`
-- fits pooled Chapman–Richards models using:
-  - unweighted fit
-  - capped-weighted fit
-  - weighted fit
-- uses k-means on taxon mean DBH at ages `≤ 15` to derive DBH growth classes
-- fits class-specific Chapman–Richards models for:
-  - slow
-  - medium
-  - fast growth classes
-- writes figures, diagnostics, and summary tables
+* reads `data/dbhage.xlsx`;
+* harmonises age and DBH values by prioritising exact values and otherwise using reported means;
+* computes optional observation-level weights when uncertainty or sample-size information is available;
+* restricts the main modelling dataset to age ≤ 40 years;
+* fits pooled Chapman–Richards models using:
+
+  * an unweighted fit used as the principal general DBH reference;
+  * a capped-weighted fit;
+  * a fully weighted fit;
+  * a study-balanced fit;
+* uses k-means clustering on taxon mean DBH at ages ≤ 15 years to derive empirical slow, medium, and fast growth classes;
+* fits Chapman–Richards relationships to the slow and medium growth classes;
+* compares Chapman–Richards, power, and log-linear alternatives for the fast DBH class;
+* uses a non-asymptotic power relationship as the selected fast-class representation within its observed age range;
+* evaluates parameter uncertainty;
+* evaluates the distribution and influence of observation-level weights;
+* quantifies study dominance;
+* performs leave-one-study-out validation;
+* evaluates sensitivity of the growth-class classification to alternative thresholds;
+* evaluates sensitivity to reporting level;
+* writes figures, diagnostic plots, predictions, and summary tables.
+
+The fast DBH power relationship is intended for interpretation within the observed age domain and is not used for unsupported long-term extrapolation.
 
 ### `scripts/height_age_analysis.R`
 
@@ -123,58 +164,85 @@ This script performs the height–age analysis.
 
 It:
 
-- reads `data/heightage.xlsx`
-- harmonises age and height values by prioritising exact values and otherwise using reported means
-- computes optional observation-level weights when uncertainty or sample-size information is available
-- restricts the main modelling dataset to `age ≤ 40`
-- identifies a fast-juvenile subset by clustering taxa on mean height at ages `≤ 15`
-- fits a baseline Chapman–Richards model excluding the fast-juvenile group
-- fits a fast-juvenile power model over ages `1–10`
-- fits a within-window sensitivity Chapman–Richards model including all records
-- writes figures, diagnostics, and summary tables
+* reads `data/heightage.xlsx`;
+* harmonises age and height values by prioritising exact values and otherwise using reported means;
+* computes optional observation-level weights when uncertainty or sample-size information is available;
+* restricts the main modelling dataset to age ≤ 40 years;
+* identifies a fast-juvenile component by clustering taxa according to mean height at ages ≤ 15 years;
+* assigns the fast-juvenile label at the taxon level;
+* fits a baseline Chapman–Richards model after excluding records belonging to fast-juvenile taxa;
+* fits a separate fast-juvenile power model using observations aged 1–10 years;
+* fits a Chapman–Richards model including all height records as a within-window sensitivity analysis;
+* compares unweighted, capped-weighted, weighted, and study-balanced baseline fits;
+* evaluates parameter uncertainty;
+* quantifies study dominance;
+* performs leave-one-study-out validation for the baseline and fast-juvenile relationships;
+* evaluates classification sensitivity under alternative age and minimum-observation thresholds;
+* evaluates sensitivity of the fast-juvenile power model to alternative fitting windows;
+* compares the operational baseline with a baseline restricted to explicitly classified taxa;
+* evaluates sensitivity to reporting level;
+* writes figures, diagnostic plots, predictions, and summary tables.
 
-### Note on the height analysis
+## Note on the height analysis
 
-In the height workflow, the fast-juvenile label is assigned at the **taxon level**, not at the individual-point level. As a result, some observations from fast-juvenile taxa may overlap the baseline cloud. The fast-juvenile power curve itself is fitted only to observations aged `1–10`.
+The fast-juvenile label is assigned at the **taxon level**, not independently to individual observations. Consequently, some observations from taxa classified as fast-juvenile may overlap the baseline cloud.
+
+The fast-juvenile power relationship itself is fitted only to observations aged 1–10 years and is interpreted as an empirical upper juvenile-growth scenario rather than as a mature-height trajectory.
+
+Taxa that do not meet the minimum requirements for clustering are retained in the operational baseline unless they belong to a taxon classified as fast-juvenile.
 
 ## Outputs
 
-Running the scripts creates local output files in:
+Running the scripts creates local output files under:
 
-- `outputs/PDF/DBH/`
-- `outputs/PDF/H/`
-- `outputs/xlsx/resultspaper.xlsx`
+```text
+outputs/PDF/DBH/
+outputs/PDF/H/
+outputs/xlsx/dbh_results.xlsx
+outputs/xlsx/height_results.xlsx
+```
 
-The two scripts write to the same Excel workbook, but to different worksheet names.
+The PDF folders contain manuscript figures, sensitivity figures, and model-diagnostic plots.
 
-Generated outputs are intended for **local use only** and are **not meant to be tracked in the repository**.
+The Excel workbooks contain model coefficients, parameter uncertainty, classification summaries, study-dominance results, leave-one-study-out validation results, sensitivity analyses, and associated predictions.
+
+Generated outputs are intended for local analysis and verification and do not need to be tracked in the repository.
 
 ## Required packages
 
 The scripts require the following R packages:
 
-- **dplyr** — data manipulation: filtering, mutating, grouping, counting, and summarising
-- **tidyr** — data tidying tools used alongside `dplyr`
-- **readxl** — reads the input Excel files
-- **ggplot2** — creates the figures and diagnostic plots
-- **minpack.lm** — fits non-linear models using the Levenberg–Marquardt algorithm
-- **purrr** — applies functions across lists and grouped objects
-- **tibble** — creates tidy table outputs
-- **openxlsx** — writes results to the Excel workbook
-- **gridExtra** — arranges multiple diagnostic plots on a page
+* `dplyr` — data manipulation, filtering, grouping, and summarisation
+* `tidyr` — data tidying
+* `readxl` — reading input Excel files
+* `ggplot2` — figures and diagnostic plots
+* `minpack.lm` — nonlinear least-squares fitting using the Levenberg–Marquardt algorithm
+* `purrr` — functional iteration across models and scenarios
+* `tibble` — tidy table outputs
+* `openxlsx` — writing Excel output workbooks
+* `gridExtra` — arranging diagnostic plots
+* `here` — construction of repository-relative file paths
 
 Install them with:
 
 ```r
 install.packages(c(
-  "dplyr", "tidyr", "readxl", "ggplot2", "minpack.lm",
-  "purrr", "tibble", "openxlsx", "gridExtra"
+  "dplyr",
+  "tidyr",
+  "readxl",
+  "ggplot2",
+  "minpack.lm",
+  "purrr",
+  "tibble",
+  "openxlsx",
+  "gridExtra",
+  "here"
 ))
 ```
 
 ## How to run the analyses
 
-Open the repository folder in RStudio and make sure the **working directory is the repository root**.
+Clone or download the repository and open the repository root as an RStudio project or as the current R working directory.
 
 Then run:
 
@@ -183,23 +251,54 @@ source("scripts/dbh_age_analysis.R")
 source("scripts/height_age_analysis.R")
 ```
 
-The scripts use repository-relative paths via `file.path(...)`, so they must be run from the repository root, not from inside the `scripts/` folder.
+The scripts should resolve input and output locations relative to the repository root.
+
+Expected input paths are:
+
+```text
+data/dbhage.xlsx
+data/heightage.xlsx
+```
+
+Outputs are written automatically to the `outputs/` directory.
 
 ## Reproducibility notes
 
-- Both scripts create output folders automatically if needed.
-- Both scripts check that the expected input file exists.
-- Both scripts check that the expected worksheet name (`data`) is present.
-- Random clustering steps use `set.seed(42)`.
-- Generated files in `outputs/` are ignored through `.gitignore`.
+* Both scripts create required output folders automatically if they do not already exist.
+* Both scripts check that the expected input file exists.
+* Both scripts check that the expected worksheet named `data` is present.
+* Required input columns are checked before model fitting.
+* Random clustering procedures use `set.seed(42)`.
+* Principal models and sensitivity analyses use the same harmonised age ≤ 40-year modelling datasets.
+* Study-balanced fits reduce the influence of studies contributing disproportionately large numbers of observations.
+* Leave-one-study-out validation removes entire source studies at each iteration to evaluate between-study transferability without record-level leakage.
+* Classification-sensitivity analyses evaluate whether empirical growth groups are stable under alternative eligibility thresholds and early-age windows.
+* Generated files in `outputs/` can be excluded from version control through `.gitignore`.
+
+## Interpretation
+
+The fitted functions are intended as broad empirical reference trajectories for situations in which stand age is known but a suitable local species- or site-specific growth equation is unavailable.
+
+They are not intended to replace locally calibrated growth-and-yield models where adequate local data exist.
+
+The pooled DBH and baseline height relationships provide general references, while the slow and medium DBH classes and the fast DBH and fast-juvenile height relationships provide alternative empirical growth scenarios within their supported domains.
 
 ## Status
 
-This is a working analysis repository associated with a manuscript in preparation. It is intended primarily for reproducibility, internal verification, and future public release alongside the paper.
+This repository accompanies a manuscript under revision.
+
+It is intended for:
+
+* reproducibility of the published analyses;
+* transparent inspection of the underlying data and analytical workflow;
+* independent verification;
+* future extension as additional eligible observations become available.
+
+The database and scripts may be updated before the final archived release associated with the published article.
 
 ## Contact
 
-Tommaso Sitzia  
-Department of Land, Environment, Agriculture and Forestry  
+**Tommaso Sitzia**
+Department of Land, Environment, Agriculture and Forestry
 University of Padova
-tommaso.sitzia@unipd.it
+[tommaso.sitzia@unipd.it](mailto:tommaso.sitzia@unipd.it)
