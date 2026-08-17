@@ -1,4 +1,3 @@
-````markdown
 # pantrop-stand-growth
 
 Data and R scripts for analysing age–height and age–DBH growth trajectories in pan-tropical planted forest stands.
