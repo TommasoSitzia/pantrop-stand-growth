@@ -1,7 +1,7 @@
 # ============================================================
-# DBH–Age analysis (expects a clean plantation-only input dataset)
+# DBH–Age analysis
 #
-# Core analysis (PAPER):
+# Core analysis:
 #   - Modelling window: age ≤ 40 years
 #   - Models: Chapman–Richards for pooled/slow/medium; power model for fast DBH (95% CI for mean curve)
 #   - Fits compared (≤40 only): unweighted (paper), capped-weighted (p99), weighted
@@ -63,9 +63,9 @@ k_classes      <- 3
 kmeans_nstart  <- 25
 
 # intervals
-do_PI_supp     <- FALSE  # PI not reported in paper
+do_PI_supp     <- FALSE 
 
-# focused reviewer analyses
+# focused analyses
 run_loso_cv       <- TRUE
 run_class_sens    <- TRUE
 run_fast_alt      <- TRUE
@@ -135,7 +135,7 @@ df_main <- df_main %>%
   ungroup() %>%
   mutate(study_weight = study_weight_raw / mean(study_weight_raw, na.rm = TRUE))
 
-# Sanity checks (these should match your paper counts if your sheet is the same one used for the manuscript)
+# Sanity checks
 cat("\nDBH dataset (all ages): n =", nrow(dat), " max age =", max(dat$agecom, na.rm=TRUE), "\n")
 cat("DBH modelling subset (age ≤ 40): n =", nrow(df_main), " max age =", max(df_main$agecom, na.rm=TRUE), "\n\n")
 
@@ -269,7 +269,7 @@ save_diag_pdf <- function(df, model, out_pdf, title_prefix = "") {
 }
 
 # ----------------------------- #
-# 3b) Focused reviewer-analysis helpers
+# 3b) Focused analysis helpers
 # ----------------------------- #
 extract_param_ci <- function(m, fit_label, level = 0.95) {
   if (is.null(m)) return(tibble(Fit = fit_label, parameter = NA_character_, estimate = NA_real_, SE = NA_real_, lower = NA_real_, upper = NA_real_))
@@ -451,9 +451,9 @@ print(tab_pooled)
 # ----------------------------- #
 # 5) Growth classes (taxon-based; age ≤ 40 ONLY)
 # ----------------------------- #
-# For classification we still use the DBH data available (not restricted to ≤40 is fine),
-# but in practice your DBH dataset is dominated by young ages; to keep everything aligned
-# with the manuscript framing, we classify using the same modelling subset df_main.
+# For classification still use the DBH data available (not restricted to ≤40),
+# but in practice the DBH dataset is dominated by young ages; to keep everything aligned
+# we classify using the same modelling subset df_main.
 taxa_ok <- df_main %>%
   group_by(taxon) %>%
   summarise(n_tot = n(), .groups = "drop") %>%

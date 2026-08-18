@@ -1,7 +1,7 @@
 # ============================================================
-# Height–Age analysis (expects a clean plantation-only input dataset)
+# Height–Age analysis
 #
-# Core analysis (PAPER):
+# Core analysis:
 #   - Modelling window: age ≤ 40 years
 #   - Two-component strategy:
 #       1) Baseline trajectory: Chapman–Richards fitted to non-fast-juvenile records (≤40)
@@ -53,7 +53,7 @@ if (!"data" %in% readxl::excel_sheets(data_path)) {
 }
 
 # ---------------------------
-# SETTINGS (match manuscript)
+# SETTINGS
 # ---------------------------
 age_max_main     <- 40      # everything in the paper is within ≤40
 A_fast_cluster   <- 15      # classify taxa using mean height at ages ≤15
@@ -172,7 +172,7 @@ df_main <- df_main %>%
 cat("Height studies in modelling subset:", n_studies_main, "\n")
 cat("Study-weight values:", dplyr::n_distinct(df_main$study_weight, na.rm = TRUE), "\n\n")
 
-# Sanity checks (these should match your manuscript if you’re running the same sheet)
+# Sanity checks
 cat("\nHeight dataset (all ages): n =", nrow(dat), " max age =", max(dat$agecom, na.rm=TRUE), "\n")
 cat("Height modelling subset (age ≤ 40): n =", nrow(df_main), " max age =", max(df_main$agecom, na.rm=TRUE), "\n\n")
 
@@ -358,7 +358,7 @@ save_diag_pdf <- function(df, model, out_pdf, title_prefix = "") {
 }
 
 # ---------------------------
-# 4b) Focused reviewer-analysis helpers
+# 4b) Focused analysis helpers
 # ---------------------------
 extract_param_ci <- function(m, fit_label, level = 0.95) {
   if (is.null(m)) return(tibble(Fit = fit_label, parameter = NA_character_, estimate = NA_real_, SE = NA_real_, lower = NA_real_, upper = NA_real_))
@@ -582,7 +582,7 @@ print(tab_fast)
 print(tab_within40_sens)
 
 # ---------------------------
-# 5b) Focused reviewer analyses
+# 5b) Focused analyses
 # ---------------------------
 param_ci_height <- bind_rows(
   extract_param_ci(m_base_unw, "Baseline unweighted"),
@@ -612,7 +612,7 @@ study_dominance <- df_main %>%
     rank = row_number()
   )
 
-# Conditional LOSO: uses the manuscript's fixed fast-juvenile labels, then leaves out entire studies.
+# Conditional LOSO: uses the fixed fast-juvenile labels, then leaves out entire studies.
 # This evaluates the fitted trajectories without record-level leakage; classification sensitivity is assessed separately below.
 if (run_loso_cv) {
   loso_base <- loso_model(df_baseline, "idarticleh", "hcom", function(d) fit_cr(d, weights_col = NULL), cv_age_breaks, cv_age_labels)
@@ -654,7 +654,7 @@ if (run_class_sens) {
 }
 
 # Reporting-level sensitivity is evaluated for the operational baseline,
-# because this is the principal height curve used in the paper.
+# because this is the principal height curve used.
 if (run_level_sens) {
   level_sens_height <- reporting_level_sensitivity_height(df_baseline)
 } else {
@@ -680,7 +680,7 @@ plot_early_CI <- function() {
       x = "Age (years)", y = "Height (m)", colour = "Points"
     ) +
     coord_cartesian(xlim = c(0, early_plot_max)) +
-    # ---- UPDATED legend labels for points ----
+    # ---- legend labels for points ----
   scale_colour_discrete(labels = c(
     "fast-juvenile" = "fast-juvenile",
     "non fast-juvenile" = "non fast-juvenile"
@@ -719,7 +719,7 @@ plot_full_CI <- function() {
       x = "Age (years)", y = "Height (m)", colour = "Points"
     ) +
     coord_cartesian(xlim = c(0, age_max_main)) +
-    # ---- UPDATED legend labels for points ----
+    # ---- legend labels for points ----
   scale_colour_discrete(labels = c(
     "fast-juvenile" = "fast-juvenile",
     "non fast-juvenile" = "non fast-juvenile"
@@ -746,7 +746,7 @@ plot_full_CI <- function() {
       inherit.aes = FALSE,
       linewidth = 1.1
     ) +
-    # ---- UPDATED legend labels for fits ----
+    # ---- legend labels for fits ----
   scale_linetype_manual(values = c(
     "Baseline (fast-juvenile excluded)" = "dashed",
     "Including fast-juvenile"          = "solid"
