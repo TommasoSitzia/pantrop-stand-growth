@@ -288,13 +288,13 @@ The complete article citation and DOI will be added after publication.
 
 ## Version and archival record
 
-GitHub contains the actively maintained data and analytical workflow. The datasets and the exact scripts used for the manuscript are permanently archived on Zenodo.
+GitHub contains the actively maintained data and analytical workflow. A fixed version of the datasets and the exact scripts used for the manuscript will be permanently archived on Zenodo before final publication.
 
-- Zenodo DOI: **[TO BE ADDED]**
-- Corresponding GitHub release: **[TO BE ADDED]**
-- Git commit: **[TO BE ADDED]**
+- Zenodo DOI: **to be added**
+- Corresponding GitHub release: **to be added**
+- Git commit: **to be added**
 
-For exact reproduction of the manuscript analyses, use the archived Zenodo version or the corresponding GitHub release.
+For exact reproduction of the manuscript analyses, use the archived Zenodo version or the corresponding tagged GitHub release once available.
 
 ## Licence
 
