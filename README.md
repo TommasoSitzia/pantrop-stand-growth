@@ -280,7 +280,7 @@ The pooled DBH and baseline height relationships provide general references. The
 
 This repository accompanies the manuscript:
 
-> **[AUTHORS].** A pan-tropical database and synthesis of age–height and age–diameter growth in planted forest stands up to 40 years. Manuscript under revision.
+> **Tommaso Sitzia, Mark J. Ducey, Flora Giulia Simonelli, Giulia Corradini.** A pan-tropical database and synthesis of age–height and age–diameter growth in planted forest stands up to 40 years. Forest Ecosystems. Manuscript under revision.
 
 Until the article is published, please cite the archived Zenodo record. After publication, please cite both the article and the specific version of the dataset used.
 
