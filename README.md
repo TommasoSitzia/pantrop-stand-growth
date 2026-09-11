@@ -278,13 +278,11 @@ The pooled DBH and baseline height relationships provide general references. The
 
 ## Citation
 
-This repository accompanies the manuscript:
+Until the article is published, the associated manuscript may be referred to provisionally as:
 
-> **Tommaso Sitzia, Mark J. Ducey, Flora Giulia Simonelli, Giulia Corradini.** A pan-tropical database and synthesis of age–height and age–diameter growth in planted forest stands up to 40 years. Forest Ecosystems. Manuscript under revision.
+Sitzia, T., Ducey, M. J., Simonelli, F. G., & Corradini, G. (2026). A pan-tropical database and synthesis of age–height and age–diameter growth in planted forest stands up to 40 years. Manuscript submitted to Forest Ecosystems.
 
-Until the article is published, please cite the archived Zenodo record. After publication, please cite both the article and the specific version of the dataset used.
-
-The complete article citation and DOI will be added after publication.
+Once the article is published, this provisional reference will be replaced by the complete bibliographic citation and DOI. Users should also cite the specific version of the Zenodo record used.
 
 ## Version and archival record
 
@@ -300,7 +298,7 @@ For exact reproduction of the manuscript analyses, use the archived Zenodo versi
 
 This project uses dual licensing to cover both the datasets and the code:
 
-- **Dataset (`data/`):** Distributed under the terms of the [Creative Commons Attribution 4.0 International License (CC-BY 4.0)](https://creativecommons.org/licenses/by/4.0/). You are free to share and adapt the material for any purpose, provided appropriate credit is given.
+- **Dataset (`data/`):** Distributed under the terms of the [Creative Commons Attribution 4.0 International License (CC-BY 4.0)](https://creativecommons.org/licenses/by/4.0/). You are free to share and adapt the material for any purpose, provided appropriate credit is given (see [Citation](#citation)).
 - **Code (`scripts/`):** Distributed under the terms of the [MIT License](LICENSE).
 
 ## Status
