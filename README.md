@@ -30,8 +30,8 @@ pantrop-stand-growth/
 │   ├── dbhage.xlsx
 │   └── heightage.xlsx
 ├── scripts/
-│   ├── dbh_age_analysis.R
-│   └── height_age_analysis.R
+│   ├── dbhage_analysis.R
+│   └── heightage_analysis.R
 ├── outputs/
 │   ├── xlsx/
 │   │   ├── dbh_results.xlsx
@@ -140,7 +140,7 @@ The observations are concentrated substantially earlier within this interval. Th
 
 ## Script summary
 
-### `scripts/dbh_age_analysis.R`
+### `scripts/dbhage_analysis.R`
 
 This script performs the DBH–age analysis. It:
 
@@ -166,7 +166,7 @@ This script performs the DBH–age analysis. It:
 
 The fast DBH power relationship is intended for interpretation within the observed age domain and is not used for unsupported long-term extrapolation.
 
-### `scripts/height_age_analysis.R`
+### `scripts/heightage_analysis.R`
 
 This script performs the height–age analysis. It:
 
@@ -225,8 +225,8 @@ install.packages(c(
 Clone or download the repository and set the repository root as the current working directory in R or RStudio. Then run:
 
 ```r
-source("scripts/dbh_age_analysis.R")
-source("scripts/height_age_analysis.R")
+source("scripts/dbhage_analysis.R")
+source("scripts/heightage_analysis.R")
 ```
 
 The scripts use repository-relative paths and should therefore be run from the repository root. Expected input paths are:
@@ -290,15 +290,18 @@ The complete article citation and DOI will be added after publication.
 
 GitHub contains the actively maintained data and analytical workflow. A fixed version of the datasets and the exact scripts used for the manuscript will be permanently archived on Zenodo before final publication.
 
-- Zenodo DOI: **to be added**
-- Corresponding GitHub release: **to be added**
+- Zenodo DOI: **10.5281/zenodo.22693772**
+- Corresponding GitHub release: **v1.0.0**
 - Git commit: **to be added**
 
 For exact reproduction of the manuscript analyses, use the archived Zenodo version or the corresponding tagged GitHub release once available.
 
 ## Licence
 
-Licence information will be added before the final archived release. If separate licences are adopted, the dataset licence and software licence will be stated independently.
+This project uses dual licensing to cover both the datasets and the code:
+
+- **Dataset (`data/`):** Distributed under the terms of the [Creative Commons Attribution 4.0 International License (CC-BY 4.0)](https://creativecommons.org/licenses/by/4.0/). You are free to share and adapt the material for any purpose, provided appropriate credit is given.
+- **Code (`scripts/`):** Distributed under the terms of the [MIT License](LICENSE).
 
 ## Status
 
