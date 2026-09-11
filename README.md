@@ -296,10 +296,11 @@ For exact reproduction of the manuscript analyses, use the archived Zenodo versi
 
 ## Licence
 
-This project uses dual licensing to cover both the datasets and the code:
+This project is distributed under the terms of the [Creative Commons Attribution 4.0 International License (CC-BY 4.0)](LICENSE). 
 
-- **Dataset (`data/`):** Distributed under the terms of the [Creative Commons Attribution 4.0 International License (CC-BY 4.0)](https://creativecommons.org/licenses/by/4.0/). You are free to share and adapt the material for any purpose, provided appropriate credit is given (see [Citation](#citation)).
-- **Code (`scripts/`):** Distributed under the terms of the [MIT License](LICENSE).
+You are free to share and adapt both the datasets (`data/`) and R scripts (`scripts/`) for any purpose, provided appropriate credit is given by citing the manuscript as specified in the [Citation](#citation) section.
+
+*The software and data are provided "as is", without warranty of any kind.*
 
 ## Status
 
