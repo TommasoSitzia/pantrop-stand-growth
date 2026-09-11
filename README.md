@@ -290,7 +290,7 @@ GitHub contains the actively maintained data and analytical workflow. A fixed ve
 
 - Zenodo DOI: **10.5281/zenodo.22693772**
 - Corresponding GitHub release: **v1.0.0**
-- Git commit: **to be added**
+- Git commit: **35a81bd**
 
 For exact reproduction of the manuscript analyses, use the archived Zenodo version or the corresponding tagged GitHub release once available.
 
