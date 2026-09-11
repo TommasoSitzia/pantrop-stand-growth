@@ -286,7 +286,7 @@ Once the article is published, this provisional reference will be replaced by th
 
 ## Version and archival record
 
-GitHub contains the actively maintained data and analytical workflow. A fixed version of the datasets and the exact scripts used for the manuscript will be permanently archived on Zenodo before final publication.
+GitHub contains the actively maintained data and analytical workflow. A fixed version of the datasets and the exact scripts used for the manuscript are permanently archived on Zenodo.
 
 - Zenodo DOI: **10.5281/zenodo.22693772**
 - Corresponding GitHub release: **v1.0.0**
