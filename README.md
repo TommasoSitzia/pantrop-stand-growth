@@ -294,7 +294,7 @@ GitHub contains the actively maintained data and analytical workflow. A fixed ve
 
 For exact reproduction of the manuscript analyses, use the archived Zenodo version or the corresponding tagged GitHub release once available.
 
-## Licence
+## License
 
 This project is distributed under the terms of the [Creative Commons Attribution 4.0 International License (CC-BY 4.0)](LICENSE). 
 
