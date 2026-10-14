@@ -4,9 +4,7 @@ Data and R scripts for analysing age–height and age–diameter at breast heigh
 
 ## Associated manuscript
 
-**A pan-tropical database and synthesis of age–height and age–diameter growth in planted forest stands up to 40 years**
-
-The manuscript is currently under revision. Its complete citation and DOI will be added after publication.
+**Tommaso Sitzia, Mark J. Ducey, Flora Giulia Simonelli, Giulia Corradini (2026) A pan-tropical database and synthesis of age–height and age–diameter growth in planted forest stands up to 40 years. Forest Ecosystems, 17, 100537. https://doi.org/10.1016/j.fecs.2026.100537**
 
 ## Overview
 
