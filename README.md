@@ -276,11 +276,9 @@ The pooled DBH and baseline height relationships provide general references. The
 
 ## Citation
 
-Until the article is published, the associated manuscript may be referred to provisionally as:
+Sitzia, T., Ducey, M. J., Simonelli, F. G., & Corradini, G. (2026). A pan-tropical database and synthesis of age–height and age–diameter growth in planted forest stands up to 40 years. Forest Ecosystems, 17, 100537. https://doi.org/10.1016/j.fecs.2026.100537
 
-Sitzia, T., Ducey, M. J., Simonelli, F. G., & Corradini, G. (2026). A pan-tropical database and synthesis of age–height and age–diameter growth in planted forest stands up to 40 years. Manuscript submitted to Forest Ecosystems.
-
-Once the article is published, this provisional reference will be replaced by the complete bibliographic citation and DOI. Users should also cite the specific version of the Zenodo record used.
+Users should also cite the specific version of the Zenodo record used.
 
 ## Version and archival record
 
